@@ -1,6 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import confetti from "canvas-confetti";
+
+
+const commonBackground = "bg-gradient-to-br from-[#e0e7ff] via-[#f3f4f6] to-[#c7d2fe]";
 
 function Quiz() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -37,18 +40,26 @@ function Quiz() {
   }, [showScore]);
 
   useEffect(() => {
-    if (showScore || isLoading || questions.length === 0) return;
-    const timer = setTimeout(() => {
-      setTimeLeft((prev) => {
-        if (prev === 1) {
-          handleAnswer(null);
-          return 10;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, [timeLeft, showScore, isLoading, currentQuestion]);
+  if (showScore || isLoading || questions.length === 0) return;
+
+  let start = Date.now();
+  const duration = 10000; // 10 seconds
+  const tickInterval = 50; // update every 50ms
+
+  const interval = setInterval(() => {
+    const elapsed = Date.now() - start;
+    const remaining = Math.max(0, duration - elapsed);
+    setTimeLeft(remaining / 1000);
+
+    if (remaining <= 0) {
+      clearInterval(interval);
+      handleAnswer(null);
+    }
+  }, tickInterval);
+
+  return () => clearInterval(interval);
+}, [currentQuestion, showScore, isLoading]);
+
 
   useEffect(() => {
     const previous = answers[currentQuestion]?.selected || null;
@@ -71,11 +82,12 @@ function Quiz() {
       return updated;
     });
 
-    if (isCorrect) {
-      const alreadyCorrect =
-        answers[currentQuestion]?.selected?.trim().toLowerCase() ===
-        currentQ.correctAnswer.trim().toLowerCase();
-      if (!alreadyCorrect) setScore((prev) => prev + 1);
+    if (
+      isCorrect &&
+      answers[currentQuestion]?.selected?.trim().toLowerCase() !==
+        currentQ.correctAnswer.trim().toLowerCase()
+    ) {
+      setScore((prev) => prev + 1);
     }
 
     setSelectedOption(null);
@@ -102,49 +114,44 @@ function Quiz() {
   };
 
   const currentQ = questions[currentQuestion];
-  const isAnswered = !!answers[currentQuestion]?.selected;
-  const progress = ((currentQuestion + (isAnswered ? 1 : 0)) / questions.length) * 100;
-  const timerProgress = (timeLeft / 10) * 100;
+  const progress = ((currentQuestion + (answers[currentQuestion]?.selected ? 1 : 0)) / questions.length) * 100;
+  // const timerProgress = (timeLeft / 10) * 100;
 
   if (isLoading || questions.length === 0) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+      <div className={`flex items-center justify-center min-h-screen ${commonBackground}`}>
         <div className="text-center">
-          <div className="animate-spin h-12 w-12 border-4 border-blue-500 border-t-transparent rounded-full mx-auto mb-4" />
-          <p className="text-blue-700 font-medium">Loading...</p>
+          <div className="animate-spin h-12 w-12 border-4 border-indigo-500 border-t-transparent rounded-full mx-auto mb-4" />
+          <p className="text-indigo-700 font-medium">Loading...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-10">
+    <div className={`min-h-screen flex items-center justify-center px-4 py-10 ${commonBackground}`}>
       <div className="max-w-xl w-full font-sans">
         {!showScore && (
-          <div className="w-full h-2 bg-gray-300 rounded mt-[80px] mb-4">
+          <div className="w-full h-2 bg-indigo-100 rounded mt-[2px] mb-4">
             <div
               className="h-full"
               style={{
                 width: `${progress}%`,
-                backgroundColor: "#3b82f6",
+                backgroundColor: "#6366f1",
                 transition: "width 0.5s ease",
               }}
             />
           </div>
         )}
 
-        <div className="bg-white p-6 rounded-xl shadow-[0_6px_24px_rgba(0,0,0,0.15)]">
+        <div className="bg-white/80 backdrop-blur-md p-6 rounded-xl shadow-xl">
           {showScore ? (
             <>
               <div className="flex justify-center">
-                <img
-                  src="/icon.jpg"
-                  alt="Score Icon"
-                  className="w-60 sm:w-72 mb-4 rounded-lg"
-                />
+                <img src="/icon.jpg" alt="Score Icon" className="w-60 sm:w-72 mb-4 rounded-lg" />
               </div>
 
-              <div className="w-full max-w-[120px] mx-auto bg-gradient-to-br from-purple-500 to-purple-700 rounded-lg shadow-md px-2.5 py-2 text-center mb-6 border border-purple-400">
+              <div className="w-full max-w-[120px] mx-auto bg-gradient-to-br from-indigo-400 to-indigo-600 rounded-lg shadow-md px-2.5 py-2 text-center mb-6 border border-indigo-300">
                 <p className="text-xs font-bold text-white tracking-wide uppercase drop-shadow-sm">
                   Your Score
                 </p>
@@ -155,10 +162,8 @@ function Quiz() {
 
               <div className="flex justify-center mt-2">
                 <button
-                  onClick={() =>
-                    navigate("/answers", { state: { answers, questions } })
-                  }
-                  className="px-4 py-1.5 border border-purple-600 bg-white text-black font-semibold rounded-full hover:bg-purple-50 transition"
+                  onClick={() => navigate("/answers", { state: { answers, questions } })}
+                  className="px-4 py-1.5 border border-indigo-500 bg-white text-black font-semibold rounded-full hover:bg-indigo-50 transition"
                 >
                   See Correct Answer
                 </button>
@@ -167,7 +172,7 @@ function Quiz() {
               <div className="flex justify-end mt-6">
                 <button
                   onClick={restartQuiz}
-                  className="px-5 py-2 bg-purple-600 text-white rounded-full hover:bg-purple-700 transition"
+                  className="px-5 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition"
                 >
                   Start Again
                 </button>
@@ -175,28 +180,29 @@ function Quiz() {
             </>
           ) : (
             <>
-              <div className="flex justify-between items-start mb-2">
-                <span className="text-[10px] text-gray-400 font-medium">
-                  Question {currentQuestion + 1}/{questions.length}
-                </span>
-                <span className="text-[10px] text-gray-400 font-medium">
-                  Time: {timeLeft}s
-                </span>
+              <div className="flex justify-between items-start mb-2 text-indigo-700 text-xs font-medium">
+                <span>Question {currentQuestion + 1}/{questions.length}</span>
+                <span>Time: {Math.ceil(timeLeft)}s</span>
               </div>
 
-              <div className="w-full h-2 bg-gray-300 rounded mb-6">
-                <div
-                  className="h-full"
-                  style={{
-                    width: `${timerProgress}%`,
-                    backgroundColor: "#8b5cf6",
-                    transition: "width 1s linear",
-                  }}
-                />
+              <div className="w-full h-2 bg-pur-100 rounded mb-6">
+               <div
+  className="h-full transition-all duration-100"
+  style={{
+    width: `${(timeLeft / 10) * 100}%`,
+    backgroundColor: "#A855F7",
+  }}
+/>
+
+              </div>
+
+              <div className="flex justify-between text-[10px] text-purple-700 mt-1 px-[2px]">
+                <span>0s</span>
+                <span>10s</span>
               </div>
 
               <h3
-                className={`text-lg font-bold mb-6 pl-4 transition-opacity duration-500 ${
+                className={`text-lg font-bold mb-6 pl-4 text-indigo-900 transition-opacity duration-500 ${
                   animateQuestion ? "opacity-100" : "opacity-0"
                 }`}
                 onAnimationEnd={() => setAnimateQuestion(false)}
@@ -210,38 +216,36 @@ function Quiz() {
                     key={idx}
                     className={`w-full max-w-xs flex items-center gap-4 px-3 py-1.5 border rounded-md cursor-pointer transition text-sm ${
                       selectedOption === option
-                        ? "bg-gray-100 border-gray-300"
-                        : "bg-white border-gray-300 hover:bg-purple-100"
+                        ? "bg-indigo-100 border-indigo-400"
+                        : "bg-white border-gray-300 hover:bg-indigo-50"
                     }`}
                   >
                     <input
                       type="checkbox"
                       checked={selectedOption === option}
                       onChange={() => setSelectedOption(option)}
-                      className="form-checkbox text-purple-600 h-4 w-4 transition-transform duration-200"
+                      className="form-checkbox text-indigo-600 h-4 w-4 transition-transform duration-200"
                     />
-                    <span className="text-gray-700">
-                      {option.replace(/^[a-d]\)\s*/i, "")}
-                    </span>
+                    <span className="text-gray-800">{option.replace(/^[a-d]\)\s*/i, "")}</span>
                   </label>
                 ))}
               </div>
 
-              <div className="flex items-center justify-between mt-6">
+              <div className="flex justify-center gap-4 mt-6">
                 <button
                   onClick={() => setCurrentQuestion((prev) => prev - 1)}
                   disabled={currentQuestion === 0}
-                  className="px-6 py-2 rounded-full border border-gray-400 text-gray-800 font-medium hover:bg-gray-100 transition disabled:opacity-50"
+                  className="w-[120px] px-6 py-2 rounded-full border border-gray-300 text-gray-800 font-medium hover:bg-gray-100 transition disabled:opacity-50"
                 >
                   Previous
                 </button>
                 <button
                   onClick={() => handleAnswer(selectedOption)}
                   disabled={!selectedOption}
-                  className={`px-6 py-2 rounded-full transition font-medium ${
+                  className={`w-[120px] px-6 py-2 rounded-full transition font-medium ${
                     selectedOption
-                      ? "bg-purple-600 text-white hover:bg-purple-700 animate-pulse"
-                      : "bg-purple-300 text-white opacity-60 cursor-not-allowed"
+                                            ? "bg-indigo-600 text-white hover:bg-indigo-700 animate-pulse"
+                      : "bg-indigo-300 text-white opacity-60 cursor-not-allowed"
                   }`}
                 >
                   Next

@@ -1,37 +1,37 @@
-    import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { GrInstallOption } from "react-icons/gr";
+const InstallPrompt = () => {
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
 
+  useEffect(() => {
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    });
+  }, []);
 
-    const InstallPrompt = () => {
-        const [deferredPrompt, setDeferredPrompt] = useState(null);
-        const [showInstallButton, setShowInstallButton] = useState(process.env.NODE_ENV === "development");
+  const handleInstallClick = () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(choiceResult => {
+        if (choiceResult.outcome === 'accepted') {
+          console.log('User accepted the A2HS prompt');
+        }
+        setDeferredPrompt(null);
+      });
+    }
+  };
 
-        useEffect(() => {
-            window.addEventListener('beforeinstallprompt', (e) => {
-                e.preventDefault();
-                console.log("beforeinstallprompt event fired"); 
-                setDeferredPrompt(e);
-                setShowInstallButton(true);
-            });
-        }, []);
+  return (
+    deferredPrompt && (
+      <button
+  onClick={handleInstallClick}
+className='  px-3 py-3 border border-gray-400 shadow-sm  rounded-full bg-purple-600'
+>
+  <GrInstallOption className='text-xl text-white ' />  
+</button>
+    )
+  );
+};
 
-        const handleInstallClick = () => {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-            }
-        };
-
-        return (
-            <>
-                {showInstallButton && (
-                    <button style={{ position: 'fixed', bottom: '20px', right: '20px', padding: '10px 20px', backgroundColor: '#007bff', color: '#fff', borderRadius: '5px', border: 'none' }} onClick={handleInstallClick}>
-                        Install App
-                    </button>
-                )}
-            </>
-        );
-    };
-
-
-
-
-    export default InstallPrompt;
+export default InstallPrompt;

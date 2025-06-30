@@ -37,7 +37,7 @@ function QuizAnswerReview() {
         </div>
 
         {/* Question */}
-        <p className="text-base font-semibold mb-10 text-black pl-12">
+        <p className="text-base font-semibold mb-10 text-black pl-30">
           {`1.${currentIndex + 1}`} {cleanedQuestion}
         </p>
 
