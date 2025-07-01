@@ -2,8 +2,8 @@ import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import confetti from "canvas-confetti";
 
-
-const commonBackground = "bg-gradient-to-br from-[#e0e7ff] via-[#f3f4f6] to-[#c7d2fe]";
+// const commonBackground = "bg-gradient-to-br from-[#e0e7ff] via-[#f3f4f6] to-[#c7d2fe]";
+// const commonBackground = "bg-[#ffff]";
 
 function Quiz() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -21,7 +21,9 @@ function Quiz() {
   useEffect(() => {
     const loadQuiz = async () => {
       try {
-        const res = await fetch("https://exam-preparation.glitch.me/api/quizzes");
+        const res = await fetch(
+          "https://exam-preparation.glitch.me/api/quizzes"
+        );
         const data = await res.json();
         setQuestions(data);
       } catch (err) {
@@ -40,26 +42,25 @@ function Quiz() {
   }, [showScore]);
 
   useEffect(() => {
-  if (showScore || isLoading || questions.length === 0) return;
+    if (showScore || isLoading || questions.length === 0) return;
 
-  let start = Date.now();
-  const duration = 10000; // 10 seconds
-  const tickInterval = 50; // update every 50ms
+    let start = Date.now();
+    const duration = 10000; // 10 seconds
+    const tickInterval = 50; // update every 50ms
 
-  const interval = setInterval(() => {
-    const elapsed = Date.now() - start;
-    const remaining = Math.max(0, duration - elapsed);
-    setTimeLeft(remaining / 1000);
+    const interval = setInterval(() => {
+      const elapsed = Date.now() - start;
+      const remaining = Math.max(0, duration - elapsed);
+      setTimeLeft(remaining / 1000);
 
-    if (remaining <= 0) {
-      clearInterval(interval);
-      handleAnswer(null);
-    }
-  }, tickInterval);
+      if (remaining <= 0) {
+        clearInterval(interval);
+        handleAnswer(null);
+      }
+    }, tickInterval);
 
-  return () => clearInterval(interval);
-}, [currentQuestion, showScore, isLoading]);
-
+    return () => clearInterval(interval);
+  }, [currentQuestion, showScore, isLoading]);
 
   useEffect(() => {
     const previous = answers[currentQuestion]?.selected || null;
@@ -70,7 +71,8 @@ function Quiz() {
     const currentQ = questions[currentQuestion];
     const isCorrect =
       selected &&
-      selected.trim().toLowerCase() === currentQ.correctAnswer.trim().toLowerCase();
+      selected.trim().toLowerCase() ===
+        currentQ.correctAnswer.trim().toLowerCase();
 
     setAnswers((prev) => {
       const updated = [...prev];
@@ -114,12 +116,15 @@ function Quiz() {
   };
 
   const currentQ = questions[currentQuestion];
-  const progress = ((currentQuestion + (answers[currentQuestion]?.selected ? 1 : 0)) / questions.length) * 100;
+  const progress =
+    ((currentQuestion + (answers[currentQuestion]?.selected ? 1 : 0)) /
+      questions.length) *
+    100;
   // const timerProgress = (timeLeft / 10) * 100;
 
   if (isLoading || questions.length === 0) {
     return (
-      <div className={`flex items-center justify-center min-h-screen ${commonBackground}`}>
+      <div className={`flex items-center justify-center min-h-screen`}>
         <div className="text-center">
           <div className="animate-spin h-12 w-12 border-4 border-indigo-500 border-t-transparent rounded-full mx-auto mb-4" />
           <p className="text-indigo-700 font-medium">Loading...</p>
@@ -129,7 +134,9 @@ function Quiz() {
   }
 
   return (
-    <div className={`min-h-screen flex items-center justify-center px-4 py-10 ${commonBackground}`}>
+    <div
+      className={`min-h-screen flex items-center justify-center px-4 py-10 `}
+    >
       <div className="max-w-xl w-full font-sans">
         {!showScore && (
           <div className="w-full h-2 bg-indigo-100 rounded mt-[2px] mb-4">
@@ -148,7 +155,11 @@ function Quiz() {
           {showScore ? (
             <>
               <div className="flex justify-center">
-                <img src="/icon.jpg" alt="Score Icon" className="w-60 sm:w-72 mb-4 rounded-lg" />
+                <img
+                  src="/icon.jpg"
+                  alt="Score Icon"
+                  className="w-60 sm:w-72 mb-4 rounded-lg"
+                />
               </div>
 
               <div className="w-full max-w-[120px] mx-auto bg-gradient-to-br from-indigo-400 to-indigo-600 rounded-lg shadow-md px-2.5 py-2 text-center mb-6 border border-indigo-300">
@@ -162,7 +173,9 @@ function Quiz() {
 
               <div className="flex justify-center mt-2">
                 <button
-                  onClick={() => navigate("/answers", { state: { answers, questions } })}
+                  onClick={() =>
+                    navigate("/answers", { state: { answers, questions } })
+                  }
                   className="px-4 py-1.5 border border-indigo-500 bg-white text-black font-semibold rounded-full hover:bg-indigo-50 transition"
                 >
                   See Correct Answer
@@ -181,24 +194,20 @@ function Quiz() {
           ) : (
             <>
               <div className="flex justify-between items-start mb-2 text-indigo-700 text-xs font-medium">
-                <span>Question {currentQuestion + 1}/{questions.length}</span>
+                <span>
+                  Question {currentQuestion + 1}/{questions.length}
+                </span>
                 <span>Time: {Math.ceil(timeLeft)}s</span>
               </div>
 
               <div className="w-full h-2 bg-pur-100 rounded mb-6">
-               <div
-  className="h-full transition-all duration-100"
-  style={{
-    width: `${(timeLeft / 10) * 100}%`,
-    backgroundColor: "#A855F7",
-  }}
-/>
-
-              </div>
-
-              <div className="flex justify-between text-[10px] text-purple-700 mt-1 px-[2px]">
-                <span>0s</span>
-                <span>10s</span>
+                <div
+                  className="h-full transition-all duration-100"
+                  style={{
+                    width: `${(timeLeft / 10) * 100}%`,
+                    backgroundColor: "#A855F7",
+                  }}
+                />
               </div>
 
               <h3
@@ -226,7 +235,9 @@ function Quiz() {
                       onChange={() => setSelectedOption(option)}
                       className="form-checkbox text-indigo-600 h-4 w-4 transition-transform duration-200"
                     />
-                    <span className="text-gray-800">{option.replace(/^[a-d]\)\s*/i, "")}</span>
+                    <span className="text-gray-800">
+                      {option.replace(/^[a-d]\)\s*/i, "")}
+                    </span>
                   </label>
                 ))}
               </div>
@@ -244,7 +255,7 @@ function Quiz() {
                   disabled={!selectedOption}
                   className={`w-[120px] px-6 py-2 rounded-full transition font-medium ${
                     selectedOption
-                                            ? "bg-indigo-600 text-white hover:bg-indigo-700 animate-pulse"
+                      ? "bg-indigo-600 text-white hover:bg-indigo-700 animate-pulse"
                       : "bg-indigo-300 text-white opacity-60 cursor-not-allowed"
                   }`}
                 >

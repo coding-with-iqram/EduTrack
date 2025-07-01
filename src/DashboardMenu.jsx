@@ -42,22 +42,22 @@ export default function DashboardMenu() {
   const menuItems = [
     {
       path: "/quiz",
-      icon: <AcademicCapIcon className="w-5 h-5 text-indigo-600" />,
+      icon: <AcademicCapIcon className="w-5 h-5 text-blue-700" />,
       label: "Start Quiz",
     },
     {
       path: "/notes",
-      icon: <PencilIcon className="w-5 h-5 text-rose-600" />,
+      icon: <PencilIcon className="w-5 h-5 text-green-600" />,
       label: "My Notes",
     },
     {
       path: "/previous-questions",
-      icon: <BookOpenIcon className="w-5 h-5 text-green-600" />,
+      icon: <BookOpenIcon className="w-5 h-5 text-orange-600" />,
       label: "Previous Questions",
     },
     {
       path: "/suggested-videos",
-      icon: <PlayIcon className="w-5 h-5 text-green-600" />,
+      icon: <PlayIcon className="w-5 h-5 text-red-600" />,
       label: "Suggested Video",
     },
   ];
@@ -80,13 +80,13 @@ export default function DashboardMenu() {
             ref={menuRef}
             className={`absolute top-28 right-7 md:right-28 bg-white text-gray-900 p-6 shadow-2xl flex flex-col rounded-3xl ${menuWidth}`}
           >
-            <ul className="list-none m-0 p-0 flex flex-col gap-3">
+            <ul className="list-none m-0 p-0 flex flex-col gap-2">
               {menuItems.map((item) => {
                 const isActive = location.pathname === item.path;
                 return (
                   <li
                     key={item.path}
-                    className={`rounded-lg transition-colors duration-150 ${
+                    className={`rounded-lg transition-colors duration-150 py-1 ${
                       isActive
                         ? "bg-purple-600"
                         : "hover:bg-gray-200"
@@ -95,7 +95,7 @@ export default function DashboardMenu() {
                     <Link
                       to={item.path}
                       onClick={() => setOpen(false)}
-                      className={`flex items-center gap-2 px-3 py-2 w-full font-medium no-underline rounded-lg ${
+                      className={`flex items-center gap-2 px-3 py-1 w-full font-medium no-underline rounded-lg ${
                         isActive ? "text-white" : "text-gray-900"
                       }`}
                     >

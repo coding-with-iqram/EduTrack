@@ -3,13 +3,13 @@
   "name": "EduTrack",
   "icons": [
     {
-      "src": "download.jpg",
-      "type": "image/jpg",
+      "src": "mortarboard.png",
+      "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "download.jpg",
-      "type": "image/jpg",
+      "src": "mortarboard.png",
+      "type": "image/png",
       "sizes": "512x512"
     }
   ],

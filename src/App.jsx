@@ -70,14 +70,13 @@ function AppContent() {
           <Route
             path="/onboarding"
             element={
-             <SurveyWrapper
-  onComplete={(data) => {
-    setShowThankYou(true);
-    setThankYouData(data); // ✅ full form data
-    return data;
-  }}
-/>
-
+              <SurveyWrapper
+                onComplete={(data) => {
+                  setShowThankYou(true);
+                  setThankYouData(data); // ✅ full form data
+                  return data;
+                }}
+              />
             }
           />
           <Route path="/" element={<Layout />}>
@@ -87,7 +86,7 @@ function AppContent() {
             <Route path="previous-questions" element={<PreviousQuestions />} />
             <Route path="answers" element={<QuizAnswerReview />} />
             <Route path="suggested-videos" element={<SuggestedVideo />} />
-            <Route path="thank-you" element={<></>} />
+            <Route path="/thank-you" element={<></>} />
           </Route>
         </Routes>
       </div>

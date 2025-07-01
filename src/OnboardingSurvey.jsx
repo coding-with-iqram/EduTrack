@@ -25,12 +25,12 @@ const questions = [
   },
   {
     name: "studyHours",
-    label: "5. How many hours do you study daily?",
+    label: "4. How many hours do you study daily?",
     options: ["Less than 1 hour", "1–2 hours", "2–4 hours", "More than 4 hours"],
   },
   {
     name: "learningStyle",
-    label: "6. What is your preferred learning style?",
+    label: "5. What is your preferred learning style?",
     options: [
       "Quizzes / Model Tests",
       "Notes / Flashcards",
@@ -40,7 +40,7 @@ const questions = [
   },
   {
     name: "contentPreference",
-    label: "7. What type of content do you prefer?",
+    label: "6. What type of content do you prefer?",
     options: [
       "Text-based (notes/eBooks)",
       "Video tutorials",

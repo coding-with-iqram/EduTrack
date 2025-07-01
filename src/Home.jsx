@@ -31,65 +31,6 @@ export default function Home() {
   return (
     <section className="relative min-h-screen bg-gradient-to-br from-indigo-100 to-purple-100 py-16 px-1 flex items-center justify-center">
       {/* 🔹 Fixed Dashboard Toggle Button */}
-      {/* <button
-        className="fixed top-4 left-4 z-50 p-2 bg-white/90 rounded-full shadow-md hover:bg-gray-100 transition sm:hidden"
-        title="Dashboard"
-        onClick={() => setMenuOpen(!menuOpen)}
-      >
-        {menuOpen ? (
-          <XMarkIcon className="w-6 h-6 text-indigo-700" />
-        ) : (
-          <Bars3Icon className="w-6 h-6 text-indigo-700" />
-        )}
-      </button> */}
-
-      {/* 🔻 Dashboard Menu */}
-      {/* {menuOpen && (
-        <div
-          ref={menuRef}
-          className="fixed top-16 left-4 z-40 bg-white rounded-xl shadow-lg border w-56 p-4 space-y-3 animate-fade-in-down"
-        >
-          <Link
-            to="/"
-            onClick={() => setMenuOpen(false)}
-            className="flex items-center gap-2 text-indigo-700 font-medium hover:underline"
-          >
-            🏠 Home
-          </Link>
-          <Link
-            to="/quiz"
-            onClick={() => setMenuOpen(false)}
-            className="flex items-center gap-2 text-blue-700 font-medium hover:underline"
-          >
-            <AcademicCapIcon className="w-5 h-5" />
-            Start Quiz
-          </Link>
-          <Link
-            to="/notes"
-            onClick={() => setMenuOpen(false)}
-            className="flex items-center gap-2 text-green-700 font-medium hover:underline"
-          >
-            <PencilIcon className="w-5 h-5" />
-            My Notes
-          </Link>
-          <Link
-            to="/previous-questions"
-            onClick={() => setMenuOpen(false)}
-            className="flex items-center gap-2 text-yellow-700 font-medium hover:underline"
-          >
-            <BookOpenIcon className="w-5 h-5" />
-            Previous Questions
-          </Link>
-          <Link
-            to="/suggested-videos"
-            onClick={() => setMenuOpen(false)}
-            className="flex items-center gap-2 text-orange-700 font-medium hover:underline"
-          >
-            <PlayIcon className="w-5 h-5" />
-            Suggested Video
-          </Link>
-        </div>
-      )} */}
 
       {/* 🔸 Main Content Cards */}
       <div className="w-full max-w-5xl">
